@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">News Articles</string>
+    <string name="search_hint">Search articles</string>
+    <string name="clear_search">Clear search</string>
+    <string name="saved_articles_banner">Showing saved articles. They may be out of date.</string>
+    <string name="retry">Retry</string>
+    <string name="empty_headlines">No headlines available right now.</string>
+    <string name="empty_search">No articles found for \"%1$s\".</string>
+    <string name="error_title">Something went wrong</string>
+    <string name="error_no_internet">No internet connection. Check your connection and try again.</string>
+    <string name="error_timeout">The request timed out. Please try again.</string>
+    <string name="error_unauthorized">The API key is invalid or missing.</string>
+    <string name="error_rate_limited">Too many requests. Please try again later.</string>
+    <string name="error_server">The news server has a problem. Please try again later.</string>
+    <string name="error_unknown">Something unexpected happened. Please try again.</string>
+    <string name="error_open_link">Could not open the link.</string>
+    <string name="details_not_found">This article is no longer available.</string>
+    <string name="unknown_author">Unknown author</string>
+    <string name="by_author">By %1$s</string>
+    <string name="read_full_article">Read full article</string>
+    <string name="back">Back</string>
+    <string name="article_image">Article image</string>
+</resources>
