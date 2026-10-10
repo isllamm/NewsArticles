@@ -9,3 +9,6 @@
 /captures/
 .externalNativeBuild/
 .cxx/
+*.jks
+*.keystore
+/app/release/
