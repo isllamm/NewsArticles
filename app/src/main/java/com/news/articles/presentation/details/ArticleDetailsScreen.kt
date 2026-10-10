@@ -31,6 +31,7 @@ import com.news.articles.R
 import com.news.articles.presentation.common.ArticleImage
 import com.news.articles.presentation.common.LoadingView
 import com.news.articles.presentation.common.MessageView
+import com.news.articles.presentation.common.Reveal
 import com.news.articles.presentation.model.ArticleDetailsUi
 import java.time.Instant
 import java.time.ZoneId
@@ -98,29 +99,46 @@ private fun ArticleDetailsContent(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text(
-                text = article.title,
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.semantics { heading() },
+            Reveal(delayMillis = 0) {
+                Text(
+                    text = article.title,
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.semantics { heading() },
+                )
+            }
+            Reveal(delayMillis = REVEAL_STEP_MS) {
+                Text(
+                    text = article.author?.let { stringResource(R.string.by_author, it) }
+                        ?: stringResource(R.string.unknown_author),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
+            SourceAndDate(
+                sourceName = article.sourceName,
+                publishedAt = article.publishedAt,
+                revealDelayMillis = REVEAL_STEP_MS * 2,
             )
-            Text(
-                text = article.author?.let { stringResource(R.string.by_author, it) }
-                    ?: stringResource(R.string.unknown_author),
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            SourceAndDate(sourceName = article.sourceName, publishedAt = article.publishedAt)
             article.description?.let { description ->
-                Text(text = description, style = MaterialTheme.typography.bodyLarge)
+                Reveal(delayMillis = REVEAL_STEP_MS * 3) {
+                    Text(text = description, style = MaterialTheme.typography.bodyLarge)
+                }
             }
             article.body?.let { body ->
-                Text(text = body, style = MaterialTheme.typography.bodyMedium)
+                Reveal(delayMillis = REVEAL_STEP_MS * 4) {
+                    Text(text = body, style = MaterialTheme.typography.bodyMedium)
+                }
             }
-            Button(
-                onClick = onReadFullArticleClick,
+            Reveal(
                 modifier = Modifier.fillMaxWidth(),
+                delayMillis = REVEAL_STEP_MS * 5,
             ) {
-                Text(stringResource(R.string.read_full_article))
+                Button(
+                    onClick = onReadFullArticleClick,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(stringResource(R.string.read_full_article))
+                }
             }
         }
     }
@@ -130,6 +148,7 @@ private fun ArticleDetailsContent(
 private fun SourceAndDate(
     sourceName: String?,
     publishedAt: Instant?,
+    revealDelayMillis: Int,
     modifier: Modifier = Modifier,
 ) {
     val formatter = remember {
@@ -137,13 +156,15 @@ private fun SourceAndDate(
     }
     val text = listOfNotNull(sourceName, publishedAt?.let(formatter::format)).joinToString(SEPARATOR)
     if (text.isNotEmpty()) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = modifier,
-        )
+        Reveal(modifier = modifier, delayMillis = revealDelayMillis) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
 }
 
 private const val SEPARATOR = " · "
+private const val REVEAL_STEP_MS = 70

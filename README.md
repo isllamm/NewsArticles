@@ -13,6 +13,7 @@ Built with Kotlin, Jetpack Compose, MVI, Hilt, Retrofit, Coroutines and Flow, an
 - **Offline mode**: articles are saved in Room. With no internet the app shows the saved headlines, and search falls back to the saved articles.
 - **Error handling**: no internet, timeout, invalid key, rate limit, server error and unreadable response each show a clear message with a Retry button, or a message bar when saved articles can still be shown.
 - **Extras**: pull to refresh, dark mode, dynamic colours on Android 12+, edge-to-edge layout.
+- **Animations**: slide and fade between the two screens, a staggered entrance and a bouncy press effect on the article cards, and a staggered reveal of the text on the details screen. They follow the system setting for animation speed.
 
 Every request sends the `x-api-key` header.
 

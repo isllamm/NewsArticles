@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.news.articles.presentation.model.ArticleUi
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filter
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,6 +36,12 @@ fun ArticleList(
     val listState = rememberLazyListState()
     val focusManager = LocalFocusManager.current
     var previousQuery by rememberSaveable { mutableStateOf(query) }
+    var hasPlayedEntrance by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(ENTRANCE_WINDOW_MS)
+        hasPlayedEntrance = true
+    }
 
     LaunchedEffect(query) {
         if (query != previousQuery) {
@@ -60,12 +67,19 @@ fun ArticleList(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            items(items = articles, key = { it.url }) { article ->
+            itemsIndexed(items = articles, key = { _, article -> article.url }) { index, article ->
                 ArticleCard(
                     article = article,
                     onClick = { onArticleClick(article.url) },
+                    modifier = Modifier.animateItem(),
+                    animateIn = !hasPlayedEntrance && index < ENTRANCE_ITEM_COUNT,
+                    entranceDelayMillis = index * ENTRANCE_STAGGER_MS,
                 )
             }
         }
     }
 }
+
+private const val ENTRANCE_ITEM_COUNT = 6
+private const val ENTRANCE_STAGGER_MS = 70
+private const val ENTRANCE_WINDOW_MS = 500L
